@@ -1,5 +1,5 @@
 # Ethernaut Motorbike Solution (After Decun Upgrade)
-Following the Decun upgrade, the selfdestruct opcode behavior has been modified (EIP-6780). This change means that the selfdestruct no longer removes the contract code from the blockchain, rendering the Motorbike challenge seemingly unsolvable. However, there is a new approach to tackle this, which we will outline in this write-up.
+Following the Decun upgrade, the `selfdestruct` opcode behavior has been modified (EIP-6780). This change means that the selfdestruct no longer removes the contract code from the blockchain, rendering the Motorbike challenge seemingly unsolvable. However, there is a new approach to tackle this, which we will outline in this write-up.
 
 ## The solution before the upgrade
 
@@ -206,5 +206,5 @@ We got all we needed to solve the challenge! Let's start exploiting!
 
 ### Exploitation
 
-See [`contracts/Exploit.sol`](https://github.com/Ching367436/ethernaut-motorbike-solution-after-decun-upgrade/blob/main/contracts/Exploit.sol).
+See [contracts/Exploit.sol](https://github.com/Ching367436/ethernaut-motorbike-solution-after-decun-upgrade/blob/main/contracts/Exploit.sol).
 My successful exploitation tx is [here](https://sepolia.etherscan.io/tx/0x6501dc5cbaf7e7851462bae7c675bfc8bfdda672966e446f3a377f0e1f917156).
