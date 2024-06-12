@@ -183,7 +183,7 @@ The `computeCreateAddress(address deployer, uint256 nonce)` function takes two p
 
 ##### Get nonce on-chain
 
-We can determine if an address is a contract by using [this method](https://ethereum.stackexchange.com/questions/15641/how-does-a-contract-find-out-if-another-address-is-a-contract). One approach is to iterate through all possible nonces and generate addresses based on them until we find an address that is not a contract (refer to the code below). However, this method will require a significant amount of gas.
+One approach is to iterate through all possible nonces and generate addresses based on them until we find an address that is not a contract (refer to the code below). However, if the nonce is large, this method will require a significant amount of gas. Alternatively, we can obtain the nonce off-chain and then pass it to the contract.
 
 ```solidity
 function getNonce(address _addr) public view returns (uint256 nonce) {
@@ -193,6 +193,7 @@ function getNonce(address _addr) public view returns (uint256 nonce) {
     }
 }
 function isContract(address _addr) public view returns (bool) {
+    // https://ethereum.stackexchange.com/questions/15641/how-does-a-contract-find-out-if-another-address-is-a-contract
     uint32 size;
     assembly {
         size := extcodesize(_addr)
