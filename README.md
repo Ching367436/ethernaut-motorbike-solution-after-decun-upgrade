@@ -202,7 +202,7 @@ function isContract(address _addr) public view returns (bool) {
 function computeCreateAddress(address deployer, uint256 nonce) public pure returns (address);
 ```
 
-So we got all we needed to solve the challenge! Let's start exploiting!
+We got all we needed to solve the challenge! Let's start exploiting!
 
 ### Exploitation
 
