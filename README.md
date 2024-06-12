@@ -208,3 +208,19 @@ We got all we needed to solve the challenge! Let's start exploiting!
 
 See [contracts/Exploit.sol](https://github.com/Ching367436/ethernaut-motorbike-solution-after-decun-upgrade/blob/main/contracts/Exploit.sol).
 My successful exploitation tx is [here](https://sepolia.etherscan.io/tx/0x6501dc5cbaf7e7851462bae7c675bfc8bfdda672966e446f3a377f0e1f917156).
+The `submitInstance` is called [here](https://sepolia.etherscan.io/tx/0x44c85bed8b0232e1bed8fa0face90bef430ecad2cc3cc1eff581a6b937bd156f#eventlog).
+
+Note that we cannot do `submitInstance()` within the same transaction as `solve()`. That's because the level [uses `Address.isContract` to check if it's solved](https://github.com/OpenZeppelin/ethernaut/blob/c8ad2e45f6ce11d2d66fb699f07ffee1ab275577/contracts/src/levels/MotorbikeFactory.sol#L34-L37). See this [commit](https://github.com/OpenZeppelin/openzeppelin-contracts/commit/a4596cab053d46e0bf2957e2ed490cb3921539ee).
+
+```solidity
+function validateInstance(address payable _instance, address _player) public override returns (bool) {
+    _player;
+    return !Address.isContract(engines[_instance]);
+}
+```
+```solidity
+* Furthermore, `isContract` will also return true if the target contract within
+* the same transaction is already scheduled for destruction by `SELFDESTRUCT`,
+* which only has an effect at the end of a transaction.
+```
+
