@@ -177,7 +177,7 @@ The address of the deployed contract is actually predictable! Referring to the [
 
 > The address of the new account is defined as being the rightmost 160 bits of the Keccak-256 hash of the [RLP encoding](https://ethereum.org/en/developers/docs/data-structures-and-encoding/rlp/) of the structure containing only the sender and the account nonce.
 
-There is a pre-existing [MIT-licensed Solidity code available for us to use in predicting the address](https://github.com/OoXooOx/Predict-smart-contract-address/blob/main/AddressPredictorCreateOpcode.sol)!
+There is a pre-existing [MIT-licensed Solidity code](https://github.com/OoXooOx/Predict-smart-contract-address/blob/main/AddressPredictorCreateOpcode.sol) available for us to use in predicting the address!
 
 The `computeCreateAddress(address deployer, uint256 nonce)` function takes two parameters: `deployer`, which we already have, and `nonce`. According to the [post](https://ethereum.stackexchange.com/questions/2701/do-the-contracts-of-ethereum-have-the-access-to-the-nonce-of-the-blocks), the `nonce` cannot be obtained on-chain. While this is technically correct, it is worth noting that the nonce can actually be inferred.
 
