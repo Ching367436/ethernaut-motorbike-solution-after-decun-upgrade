@@ -1,5 +1,5 @@
-# Ethernaut Motorbike Solution (After Decun Upgrade)
-Following the Decun upgrade, the `selfdestruct` opcode behavior has been modified (EIP-6780). This change means that the selfdestruct no longer removes the contract code from the blockchain, rendering the Motorbike challenge seemingly unsolvable. However, there is a new approach to tackle this, which we will outline in this write-up.
+# Ethernaut Motorbike Solution (After Dencun Upgrade)
+Following the Dencun upgrade, the `selfdestruct` opcode behavior has been modified (EIP-6780). This change means that the selfdestruct no longer removes the contract code from the blockchain, rendering the Motorbike challenge seemingly unsolvable. However, there is a new approach to tackle this, which we will outline in this write-up.
 
 ## The solution before the upgrade
 
