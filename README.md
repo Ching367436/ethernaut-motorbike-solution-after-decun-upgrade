@@ -207,7 +207,7 @@ We got all we needed to solve the challenge! Let's start exploiting!
 
 ### Exploitation
 
-See [contracts/Exploit.sol](https://github.com/Ching367436/ethernaut-motorbike-solution-after-decun-upgrade/blob/main/contracts/Exploit.sol).
+See [contracts/Exploit.sol](contracts/Exploit.sol).
 My successful exploitation tx is [here](https://sepolia.etherscan.io/tx/0x6501dc5cbaf7e7851462bae7c675bfc8bfdda672966e446f3a377f0e1f917156).
 The `submitInstance` is called [here](https://sepolia.etherscan.io/tx/0x44c85bed8b0232e1bed8fa0face90bef430ecad2cc3cc1eff581a6b937bd156f#eventlog).
 
