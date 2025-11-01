@@ -3,11 +3,12 @@ pragma solidity ^0.8.19;
 
 contract AddressHelper {
     function getNonce(address _addr) public view returns (uint256 nonce) {
-        for (; ; nonce = nonce + 1) {
+        for (;; nonce = nonce + 1) {
             address contractAddress = computeCreateAddress(_addr, nonce);
             if (!isContract(contractAddress)) return nonce;
         }
     }
+
     function isContract(address _addr) public view returns (bool) {
         // https://ethereum.stackexchange.com/questions/15641/how-does-a-contract-find-out-if-another-address-is-a-contract
         uint32 size;
@@ -21,7 +22,7 @@ contract AddressHelper {
         uint256 nonce = getNonce(deployer);
         return computeCreateAddress(deployer, nonce);
     }
-   
+
     // The code below is adapted from https://github.com/OoXooOx/Predict-smart-contract-address/blob/main/AddressPredictorCreateOpcode.sol
     function addressFromLast20Bytes(bytes32 bytesValue) private pure returns (address) {
         return address(uint160(uint256(bytesValue)));
